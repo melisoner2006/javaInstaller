@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Melis
+/*
+ * @author Melis Oner
+ * 
+ * 
  */
 public class ExecuteOSCommands {
     private static String OSname;
@@ -23,6 +24,8 @@ public class ExecuteOSCommands {
     public static boolean IS_WINDOWS;
     public static boolean IS_LINUX;
     public static boolean IS_SOLARIS;
+    private static String directory;    
+    
 
     
     
@@ -32,7 +35,7 @@ public class ExecuteOSCommands {
         rt = Runtime.getRuntime();
         IS_WINDOWS  = is_os_windows();
         IS_LINUX    = is_os_linux();
-        IS_SOLARIS  = is_os_solaris();       
+        IS_SOLARIS  = is_os_solaris();      
         unzip();
     }
 
@@ -53,17 +56,15 @@ public class ExecuteOSCommands {
     }
     
     public static void unzip(){
-        //Process p;
+        
         if (IS_WINDOWS){
             try {
                 Logger.getLogger(ExecuteOSCommands.class.getName()).log(Level.INFO, "Trying to execute command...DIR");
                 //In command prompt type -> cmd /c  to see other options
-                Process p1 = rt.exec("cmd /c DIR");
+                Process p1 = rt.exec("cmd /c unzip C:\\Users\\Melis\\Documents\\NetBeansProjects\\SnapApp\\externalpackages\\handouts.zip");
                 getProcessResult(rt, p1);
-                Process p2 = rt.exec("cmd /c unzip C:\\Users\\Melis\\Documents\\NetBeansProjects\\SnapApp\\externalpackages\\handouts.zip");
-                getProcessResult(rt, p2);
-                Process p3 = rt.exec("cmd /c DIR C:\\Users\\Melis\\Documents\\NetBeansProjects\\SnapApp\\");
-                getProcessResult(rt, p3);
+                Logger.getLogger(ExecuteOSCommands.class.getName()).log(Level.INFO, "Unzip is completed...");
+               
             } catch (IOException ex) {
                 Logger.getLogger(ExecuteOSCommands.class.getName()).log(Level.SEVERE, "IOException caught when executing unzip...", ex);
             }
@@ -107,5 +108,5 @@ public class ExecuteOSCommands {
     public void setOSname(String OSname) {
         this.OSname = OSname;
     }
-        
+  
 }

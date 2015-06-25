@@ -1,0 +1,223 @@
+<html>
+<head>
+<title>HTML Sample Form</title>
+
+<script language="JavaScript1.2">
+<!--
+message = "";
+
+function isDate(theElement) {
+  // dd-mmm-yyyy format; leading zeros required
+  str = theElement.value;
+  len = str.length;
+  if(len != 11) {
+///    message = message + "Date input must be 11 characters in length, e.g. 01-Jan-2002<br>"
+    return false;
+  } 
+  strday = str.substring(0, 2);
+  strmonth = str.substring(3, 6).toUpperCase();
+  stryear = str.substring(7, 11);
+  theElement.value = theElement.value.substring(0,2) + "-" + theElement.value.substring(3,6) + "-" + theElement.value.substring(7,11);
+  if( isNaN(strday) || (strday < 0) || isNaN(stryear) || (stryear < 0)) {
+///    message = message + "Value must be a valid date<br>";
+    return false;
+  }
+  // Ensure valid month and set maximum days for that month...
+  if( (strmonth == "JAN") || (strmonth == "MAR") || (strmonth == "MAY") || 
+      (strmonth == "JUL") || (strmonth == "AUG") || (strmonth == "OCT") || 
+      (strmonth == "DEC") ) { monthdays = 31 }
+  else if( (strmonth == "APR") || (strmonth == "JUN") || (strmonth == "SEP") ||
+           (strmonth == "NOV") ) { monthdays = 30 }
+  else if(strmonth == "FEB") { 
+    monthdays = ((stryear % 4) == 0) ? 29 : 28; 
+  } else {
+///    message = message + "Month must be valid, e.g. 01-Jan-2002<br>";
+    return false;
+  }
+  if(strday > monthdays) {
+///    message = message + monthdays + " is the valid number of days for "+strmonth+", 20"+stryear +"<br>";
+    return false;
+  }
+  return true;
+}
+
+function checkform(){
+// delete the line below for real world application ...
+   message = "<table border=1><tr><td><b>Obj #</b></td><td><b>Type</b></td><td><b>Name</b></td><td><b>Value</b></td><td><b>Checked</b></td><td><b>Select #</b></td><td><b>Number</b></td><td><b>Date</b></td></tr>";
+   var ichk = 0;
+   var testdate = "0";
+   if (document.myform){
+      for (i=0;i<document.myform.elements.length;i++) {
+         var temptyp=document.myform.elements[i].type ; 
+         var tempobj=document.myform.elements[i].name ; 
+         var tempval=document.myform.elements[i].value ;
+         var tempchk=document.myform.elements[i].checked ;
+         var tempsel=document.myform.elements[i].selectedIndex ;
+         var anum=/(^\d+$)|(^\d+\.\d+$)/ ;
+         if (anum.test(tempval)) {
+            testresult=true; 
+         } else {
+            testresult=false; 
+         }
+         testdate = isDate(document.myform.elements[i]);
+// The following builds the message string to include all the form information ...
+// delete the line below for real world application ...
+         message = message+"<tr><td>"+i+"</td><td>"+temptyp+"</td><td>"+ tempobj+"</td><td>"+tempval+"</td><td>"+tempchk+"</td><td>"+tempsel+"</td><td>"+testresult+"</td><td>"+testdate+"</td></tr>";
+// Put all form validations below ... //
+        if (tempobj=="OEM[]" && tempval!=""){
+           var tempval=document.myform.elements['OEM[]'] ;
+           message = message+"<tr><td>"+i+"</td><td>"+temptyp+"</td><td>"+ tempobj+"</td><td>"+tempval+"</td><td>"+tempchk+"</td><td>"+tempsel+"</td><td>"+testresult+"</td><td>"+testdate+"</td></tr>";
+           message = message+"<tr><td>"+i+"</td><td>"+temptyp+"</td><td>"+ tempobj+"</td><td><font size=-2>CGI program will process multi-select array object values selected...</font></td><td>"+tempchk+"</td><td>"+tempsel+"</td><td>"+testresult+"</td><td>"+testdate+"</td></tr>";
+//
+//           var variable = document.myform.elements['OEM[]'];
+//           var jcnt = variable.length ;
+//           for(j=0; j<jcnt; j++) message =  message + j+")"+variable[j].value+"<br>"; 
+//
+        }
+
+// End of form validations ... //
+      } 		
+   }
+// delete the line below for real world application ...
+   message = message+"</table>";
+   if ( message.length > 0 ) {    // is there an error message?
+      openWin3(message);  	 // display error message in new window
+      return false;            // return bad, not ok to process
+   } else {
+      return true;   // no error message to display, return ok to process
+   }
+}
+
+function openWin3(message) {
+   myWin = open("", "displayWindow", "width=640,height=620,scrollbars=1,resizable=1,status=no,toolbar=no,menubar=no");
+   myWin.document.open(); 
+   myWin.document.write("<html><head><title>Form Validation");
+   myWin.document.write("</title></head>");
+   myWin.document.write("<body>");
+   myWin.document.write("<script>");
+   myWin.document.write("function closeIt() { ");
+   myWin.document.write("close();"); 
+   myWin.document.write("}"); 
+   myWin.document.write("</script>");
+   myWin.document.write("<center><font size=+1>");
+// Clean up line below for real world applications ...
+   myWin.document.write("<b><i>Form Information Entered/Selected and Validation Results</i></b>");
+   myWin.document.write("<br></font></center><hr>");
+   myWin.document.write(message);
+   myWin.document.write("<hr>");
+   myWin.document.write("<center><form>");
+   myWin.document.write("<input type=button value='Close this Window' onClick='closeIt()'>")
+   myWin.document.write("</form></center>");
+   myWin.document.write("</body></html>");
+   myWin.document.close(); 
+}
+
+function myfunction() {
+   // Array of month Names
+   dateStr="";
+   var monthNames = new Array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+   // date
+   var now = new Date();
+   date= now.getDate();
+   month= now.getMonth();
+   year= now.getYear();
+   if (navigator.appName == "Netscape") {
+      year=year+1900;
+   }
+   dateStr= "" + ((date < 10) ? "0" : "" ) + date;
+   dateStr+= "-" + monthNames[month];
+   dateStr+= "-" + year;
+//   document.myform.in_date.value = dateStr;
+   document.write ("<p>Enter Date (dd-mon-yy): <input type=text name=in_date size=14 maxlength=14 value="+dateStr+"></p>");
+}
+
+// -->
+</script>
+
+</head>
+<body BACKGROUND="images/bg1.gif">
+
+<img align="left" src="images/your_company_logo.jpg">
+<br><br>
+<p align="left"><font size="+2"><b><i>HTML Sample Form</i></b></font>
+</p>
+<hr>
+
+<form name="myform" method="get" onsubmit="return checkform()" action="">
+
+<! --- Hidden Variables --- >
+<input type="hidden" name="hidden" value="1">
+
+<! --- Text --- >
+<p>Person's Name: <input type="text" name="persons-name" size="40" maxlength="40" value=""> </p>
+
+<! --- Password --- >
+<p>Password: <input type="password" name="password" size="10" maxlength="10" value=""> </p>
+
+<! --- Date --- > 
+<script language="JavaScript1.2">myfunction();</script >
+
+<! --- Checkbox --- >
+<p>Please check all hobby's:&nbsp;&nbsp;&nbsp;
+Hockey <input type="checkbox" name="hockey" value="Hockey" checked>&nbsp;&nbsp;
+Golf <input type="checkbox" name="golf" value="Golf">&nbsp;&nbsp;
+Bridge <input type="checkbox" name="bridge" value="Bridge">&nbsp;&nbsp;
+Horses <input type="checkbox" name="horses" value="Horses">&nbsp;&nbsp;
+Chess <input type="checkbox" name="chess" value="Chess">
+</p>
+
+<! --- Select --- >
+<p>What Country do you Live in? <select name="Country" size="1">
+    <option value="USA" selected>United States </option>
+    <option value="MEX">Mexico </option>
+    <option value="CA">Canada </option>
+  </select> </p>
+
+<! --- Multiple Select --- >
+<table>
+<tr>
+<td align=center>Select all the Vehicle Manufactures which you have owned?<br>
+<font size=+0><i>Use the Control or Shift Key with your Mouse Selection<i></font></td>
+<td>  <select multiple name="OEM[]" size="6">
+    <option value="Audi">Audi</option>
+    <option value="BMW">BMW</option>
+    <option value="DC">Diamler-Chrysler</option>
+    <option value="Ford">Ford</option>
+    <option value="GM">GM</option>
+    <option value="Honda">Honda</option>
+    <option value="Mazda">Mazda</option>
+    <option value="Nissan">Nissan</option>
+    <option value="Sat">Saturn</option>
+    <option value="Toyota">Toyota</option>
+    <option value="Other">Other</option>
+  </select> 
+</td>
+</tr>
+</table>
+
+<! --- Radio --- >
+<p>What Type of Computer do you have? &nbsp;&nbsp;&nbsp;
+Unix <input type="radio" name="Computer" value="Unix">&nbsp;&nbsp;&nbsp;
+NT <input type="radio" name="Computer" value="NT">&nbsp;&nbsp;&nbsp; 
+PC <input type="radio" name="Computer" value="PC" checked>
+</p>
+
+<! --- Text Area --- >
+<p>Comments: <br>
+<textarea name="comments" rows="5" cols="70" wrap="virtual"> 
+Default Text Goes Here...
+</textarea> 
+</p>
+
+<! --- File Attachment --->
+<p>Select a File Attachment: <INPUT TYPE=file NAME="in_file" size="40"> </p>
+
+<! --- Submit / Reset --->
+<p><input type="submit" name="Request" value="Submit This Form"> 
+   <input type="reset" name="Clear" value="Clear Form and Start Over"> 
+</p>
+
+</form>
+
+</body>
+</html>
