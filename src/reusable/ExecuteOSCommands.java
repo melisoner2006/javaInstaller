@@ -78,11 +78,11 @@ public class ExecuteOSCommands {
         return getOSname().equals("Windows");
     }
     
-    public boolean is_os_linux(){
+    private boolean is_os_linux(){
         return getOSname().equals("Linux");
     }
     
-    public boolean is_os_solaris(){
+    private boolean is_os_solaris(){
         return getOSname().equals("Solaris");
     }
     
